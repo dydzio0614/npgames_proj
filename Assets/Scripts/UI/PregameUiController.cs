@@ -48,6 +48,7 @@ public class PregameUiController : MonoBehaviour
             throw new InvalidOperationException(
                 $"{nameof(PregameUiController)}.{nameof(StartButtonEventHandler)}: Unexpected amount of quantity buttons");
         
+        GameManager.Instance.StartGame(objectsQuantity.Value);
         gameObject.SetActive(false);
         ResetState();
     }

@@ -16,4 +16,20 @@ public class MainUiController : MonoBehaviour
         pregameComponent.gameObject.SetActive(true);
         gameOverComponent.gameObject.SetActive(false);
     }
+
+    private void Start()
+    {
+        GameManager.Instance.OnGameEnded += GameEndedEventHandler;
+    }
+
+    private void GameEndedEventHandler()
+    {
+        pregameComponent.gameObject.SetActive(true);
+        gameOverComponent.gameObject.SetActive(true);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnGameEnded -= GameEndedEventHandler;
+    }
 }
