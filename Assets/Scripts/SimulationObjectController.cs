@@ -60,9 +60,11 @@ public class SimulationObjectController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (healthPoints == 0)
+            return;
+        
         healthPoints -= 1;
-
-        if (healthPoints <= 0)
+        if (healthPoints == 0)
         {
             OnDeath?.Invoke();
             Destroy(gameObject);
