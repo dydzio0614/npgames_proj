@@ -74,7 +74,12 @@ public class SimulationObjectController : MonoBehaviour
     private void Shoot()
     {
         var currentTransform = transform;
-        GameObject.Instantiate(bulletPrefab, currentTransform.position + currentTransform.forward, currentTransform.rotation, GameManager.Instance.BulletsContainer);
+
+        GameObject availableExistingBullet = GameManager.Instance.GetAvailableBullet();
+        if (availableExistingBullet != null)
+            availableExistingBullet.transform.SetPositionAndRotation(currentTransform.position + currentTransform.forward, currentTransform.rotation);
+        else
+            Instantiate(bulletPrefab, currentTransform.position + currentTransform.forward, currentTransform.rotation, GameManager.Instance.BulletsContainer);
     }
     
     private IEnumerator DamageReceivedCoroutine()

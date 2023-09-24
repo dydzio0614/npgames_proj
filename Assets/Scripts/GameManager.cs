@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     private GameObject simulationObjectPrefab;
     [SerializeField]
     private Transform simulationObjectsContainer;
+    [SerializeField]
+    private GameObject bulletPrefab;
+
+    private readonly List<GameObject> availableBullets = new List<GameObject>();
 
     private int currentObjectsQuantity;
     
@@ -42,7 +47,31 @@ public class GameManager : MonoBehaviour
             var spawnedObject = Instantiate(simulationObjectPrefab,
                 new Vector3(UnityEngine.Random.Range(spawnSpot.x - 0.25f, spawnSpot.x + 0.25f), 0.5f, UnityEngine.Random.Range(spawnSpot.y - 0.25f, spawnSpot.y + 0.25f)), Quaternion.identity, simulationObjectsContainer);
             spawnedObject.GetComponent<SimulationObjectController>().OnDeath += SimulationObjectDeathEventHandler;
+
+            Instantiate(bulletPrefab, new Vector3(0f, 500f, 0f), Quaternion.identity, BulletsContainer);
         }
+    }
+
+    public void RegisterNewAvailableBullet(GameObject bullet)
+    {
+        bullet.gameObject.SetActive(false);
+        bullet.transform.position = new Vector3(0f, 500f, 0f);
+        availableBullets.Add(bullet);
+    }
+
+    public GameObject GetAvailableBullet()
+    {
+        GameObject bullet = availableBullets.FirstOrDefault();
+        if(bullet != null)
+            RemoveBulletAvailability(bullet);
+
+        return bullet;
+    }
+    
+    private void RemoveBulletAvailability(GameObject bullet)
+    {
+        availableBullets.Remove(bullet);
+        bullet.gameObject.SetActive(true);
     }
 
     private List<Vector2> GenerateSpawnPositionsList()
